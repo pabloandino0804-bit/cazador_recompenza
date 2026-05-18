@@ -14,4 +14,10 @@ public interface IProfugo {
     void reducirHabilidad();
 
     void disminuirInocencia();
+
+    void artesMarcialesAvanzadas();
+
+    void entrenamientoDeElite();
+
+    void proteccionLegal();
 }

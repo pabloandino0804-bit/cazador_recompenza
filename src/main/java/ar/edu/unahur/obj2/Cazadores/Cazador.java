@@ -36,6 +36,7 @@ public abstract class Cazador{
     public void cazar(Profugo unProfugo) {
             profugosCapturados.add(unProfugo);
     }
+    
     protected Boolean puedeCazar(IProfugo unProfugo) {
         return this.experiencia > unProfugo.getNivelDeInocencia() && doPuedeCazar(unProfugo);
     }

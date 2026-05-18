@@ -1,10 +1,14 @@
 package ar.edu.unahur.obj2.Profugos;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Profugo implements IProfugo{
     protected String nombre;
     protected Integer nivelInocencia = 0;
     protected Integer nivelHabilidad;
     protected Boolean estaNervioso;
+    private Set<String> entrenamientos = new HashSet<>();
 
     public Profugo(String nombre, Integer nivelInocencia, Integer nivelHabilidad, Boolean estaNervioso) {
         this.nombre = nombre;
@@ -32,6 +36,10 @@ public class Profugo implements IProfugo{
         return estaNervioso;
     }
 
+    public Set<String> getEntrenamientos() {
+        return entrenamientos;
+    }
+
     @Override
     public void volverseNervioso() {
         this.estaNervioso = true;
@@ -49,7 +57,12 @@ public class Profugo implements IProfugo{
 
     @Override
     public void disminuirInocencia() {
-        this.setNivelDeInocencia(this.nivelInocencia-2);
+        if(entrenamientos.contains("proteccionLegal")){
+            this.setNivelDeInocencia(Math.max(this.nivelInocencia-2, 40));
+        }
+        else {
+            this.setNivelDeInocencia(this.nivelInocencia-2);
+        }
     }
 
     public void setNivelDeInocencia(Integer nivInocencia) {
@@ -71,8 +84,10 @@ public class Profugo implements IProfugo{
         return nivHabilidad <= 100;
     }
 
-    public void artesMarcialesAvanzadas(){
+    @Override
+    public void artesMarcialesAvanzadas() {
         this.setNivelDeHabilidad(Math.min(this.nivelHabilidad*2,100));
+        entrenamientos.add("artesMarcialesAvanzadas");
     }
 
     public void setNivelDeHabilidad(Integer nivHabilidad) {
@@ -86,11 +101,17 @@ public class Profugo implements IProfugo{
         this.nivelHabilidad = Integer.max(nivHabilidad,0);
     }
 
+    @Override
     public void entrenamientoDeElite() {
-        ;
+        this.dejarSerNervioso();
+        entrenamientos.add("entrenamientoDeElite");
     }
 
+    @Override
     public void proteccionLegal() {
-        ;
+        if (nivelInocencia < 40){
+            setNivelDeInocencia(40);
+        }
+        entrenamientos.add("proteccionLegal");
     }
 }

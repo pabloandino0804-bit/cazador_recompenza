@@ -22,7 +22,17 @@ public class Zona {
         return profugosEnLaZona;
     }
 
+    public Integer profugoConMenorHabilidad(){
+        return profugosEnLaZona.stream().mapToInt(p -> p.getNivelDeHabilidad()).min().orElse(0);
+    }
+
     public boolean noHayProfugos(){
-        return this.getProfugosEnLaZona().size() == 0;
+        return profugosEnLaZona.isEmpty();
+    }
+
+    public void sacarProfugoSiPuede(Profugo unProfugo, Boolean condicion){
+        if(condicion) {
+            profugosEnLaZona.remove(unProfugo);
+        }
     }
 }

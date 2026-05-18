@@ -2,21 +2,22 @@ package ar.edu.unahur.obj2.Cazadores;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import ar.edu.unahur.obj2.Profugos.IProfugo;
 import ar.edu.unahur.obj2.Profugos.Profugo;
 import ar.edu.unahur.obj2.lugares.Zona;
 
-public abstract class Cazador {
-    protected Integer experiencia = 0;
-    protected Set<Profugo> profugos = new HashSet<Profugo>();
+public abstract class Cazador{
+    protected Integer experiencia;
+    protected Set<Profugo> profugosCapturados = new HashSet<Profugo>();
 
-    public void realizarProcesoDeCaza(Zona unaZona){
-        unaZona.getProfugosEnLaZona().stream().forEach(unProfugo -> this.capturarProfugo(unProfugo));
+    public Cazador(Integer experiencia){
+        this.experiencia = experiencia;
     }
 
-    public Set<Profugo> getProfugos(){
-        return profugos;
+    public void realizarProcesoDeCaza(Zona unaZona) {
+        unaZona.getProfugosEnLaZona().stream().forEach(p -> this.capturarProfugo(p));
+        profugosCapturados.forEach(p -> unaZona.sacarProfugoSiPuede(p, profugosCapturados.contains(p)));
+        experiencia += unaZona.profugoConMenorHabilidad() + (2 * this.getProfugos().size());
     }
 
     public void capturarProfugo(Profugo unProfugo) {
@@ -28,8 +29,12 @@ public abstract class Cazador {
             }
     }
 
+    public Set<Profugo> getProfugos() {
+        return profugosCapturados;
+    }
+
     public void cazar(Profugo unProfugo) {
-            profugos.add(unProfugo);
+            profugosCapturados.add(unProfugo);
     }
     protected Boolean puedeCazar(IProfugo unProfugo) {
         return this.experiencia > unProfugo.getNivelDeInocencia() && doPuedeCazar(unProfugo);

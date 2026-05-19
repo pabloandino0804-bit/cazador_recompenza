@@ -1,6 +1,7 @@
 package ar.edu.unahur.obj2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,37 @@ public class ProfugoTest {
 
     @BeforeEach 
     void setup(){
-        miProfugo = new Profugo("martin", 35, 25, true);
+        miProfugo = new Profugo("Juan", 35, 25, true);
+    }
+
+    @Test
+    void cuandoSePreguntaElNivelInocenciaDevuelveSuInocencia(){
+        assertEquals(miProfugo.getNivelDeInocencia(), 35);
+    }
+
+    @Test
+    void cuandoSePreguntaElNivelHabilidadDevuelveSuHabilidad(){
+        assertEquals(miProfugo.getNivelDeHabilidad(), 25);
+    }
+
+    @Test
+    void SiElNivInocenciaACambiarEsNuloOSobrepasaDel100LanzaraUnaException(){
+        assertThrows(NullPointerException.class, () -> miProfugo.setNivelDeInocencia(null));
+    }
+
+    @Test
+    void SIElNivelDeInocenciaNoEsDeEntre0y100LanzaraUnaExcepcionDeNivelInvalido(){
+        assertThrows(NivInvalidoException.class, () -> miProfugo.setNivelDeInocencia(-10));
+    }
+
+    @Test
+    void SiElNivHabilidadACambiarEsNuloOSobrepasaDel100LanzaraUnaException(){
+        assertThrows(NullPointerException.class, () -> miProfugo.setNivelDeHabilidad(null));
+    }
+
+    @Test
+    void SiElNivelDeHabilidadACambiarSePasaDe100EntoncesLanzaraUnaNivelInvalido(){
+        assertThrows(NivInvalidoException.class, () -> miProfugo.setNivelDeHabilidad(1000));
     }
 
     @Test
@@ -24,6 +55,7 @@ public class ProfugoTest {
 
     @Test
     void cuandoUnProfugoEntrenaEntrenamientoEliteNuncaSeConsideraraNervioso(){
+        assertTrue(miProfugo.estaNervioso());
         miProfugo.entrenamientoDeElite();
         assertTrue(!miProfugo.estaNervioso());
         assertTrue(miProfugo.getEntrenamientos().contains("entrenamientoDeElite"));

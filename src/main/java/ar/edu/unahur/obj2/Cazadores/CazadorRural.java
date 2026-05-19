@@ -4,8 +4,8 @@ import ar.edu.unahur.obj2.Profugos.IProfugo;
 
 public class CazadorRural extends Cazador {
 
-    public CazadorRural(Integer experiencia) {
-        super(experiencia);
+    public CazadorRural(String nombre, Integer experiencia) {
+        super(nombre, experiencia);
     }
 
     @Override

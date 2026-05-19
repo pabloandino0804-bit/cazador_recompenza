@@ -3,11 +3,13 @@ package ar.edu.unahur.obj2.Profugos;
 import java.util.HashSet;
 import java.util.Set;
 
+import ar.edu.unahur.obj2.NivInvalidoException;
+
 public class Profugo implements IProfugo{
-    protected String nombre;
-    protected Integer nivelInocencia = 0;
-    protected Integer nivelHabilidad;
-    protected Boolean estaNervioso;
+    private String nombre;
+    private Integer nivelInocencia = 0;
+    private Integer nivelHabilidad;
+    private Boolean estaNervioso;
     private Set<String> entrenamientos = new HashSet<>();
 
     public Profugo(String nombre, Integer nivelInocencia, Integer nivelHabilidad, Boolean estaNervioso) {
@@ -17,7 +19,7 @@ public class Profugo implements IProfugo{
         this.estaNervioso = estaNervioso;
     }
 
-    public String getNombre() {
+    public String getNombreProfugo(){
         return nombre;
     }
 
@@ -70,8 +72,7 @@ public class Profugo implements IProfugo{
             throw new NullPointerException("El nivel de inocencia no debe ser nulo");
         }
         if(!validarInocencia(nivInocencia)){
-            throw new IllegalArgumentException("El nivel de inocencia debe estar entre 0 y 100."
-            );
+            throw new NivInvalidoException("El nivel de inocencia debe estar entre 0 y 100.");
         }
         this.nivelInocencia = nivInocencia;
     }
@@ -95,8 +96,7 @@ public class Profugo implements IProfugo{
             throw new NullPointerException("El nivel de habilidad no debe ser nulo");
         }
         if(!validarHabilidad(nivHabilidad)){
-            throw new IllegalArgumentException("El nivel de habilidad debe estar entre 0 y 100."
-            );
+            throw new NivInvalidoException("El nivel de habilidad debe ser mayor a 100.");
         }
         this.nivelHabilidad = Integer.max(nivHabilidad,0);
     }

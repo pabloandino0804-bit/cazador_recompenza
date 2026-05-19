@@ -1,5 +1,6 @@
 package ar.edu.unahur.obj2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +23,9 @@ public class CazadorTest {
 
     @BeforeEach
     void setup(){
-        profugo1 = new Profugo("matias", 23, 45, false);
-        profugo2 = new Profugo("sebastian", 30, 49, false);
-        profugo3 = new Profugo("fred", 40, 48, false);
+        profugo1 = new Profugo("luis", 23, 45, false);
+        profugo2 = new Profugo("micaela", 30, 50, false);
+        profugo3 = new Profugo("roxanna", 40, 51, false);
 
         grupo = new HashSet<>();
     }
@@ -32,35 +33,60 @@ public class CazadorTest {
     //Tests parte 1
     @Test
     void unCazadorSigilosoRealizaElProcesoDeCaptraEnUnaZonaCapturandoLosProfugosSinDejarNada() {
-        Cazador elCazador = new CazadorSigiloso(50);
+        Cazador elCazador = new CazadorSigiloso("matt", 50);
         grupo.add(profugo1);
         grupo.add(profugo2);
         grupo.add(profugo3);
         Zona baseProfugo = new Zona("base", grupo);
         elCazador.realizarProcesoDeCaza(baseProfugo);
+        assertTrue(!baseProfugo.noHayProfugos());
+        elCazador.realizarProcesoDeCaza(baseProfugo);
         assertTrue(baseProfugo.noHayProfugos());
+        assertEquals(elCazador.cantProfugosCapturados(), 3);
     }
 
     @Test
     void unCazadorRuralRealizaElProcesoDeCaptraEnUnaZonaCapturandoLosProfugosSinDejarNada(){
-        Cazador elCazador = new CazadorRural(50);
+        Cazador elCazador = new CazadorRural("Tommy", 50);
+        profugo1.volverseNervioso();
         grupo.add(profugo1);
         grupo.add(profugo2);
         grupo.add(profugo3);
         Zona baseProfugo = new Zona("base", grupo);
         elCazador.realizarProcesoDeCaza(baseProfugo);
+        assertTrue(!baseProfugo.noHayProfugos());
         elCazador.realizarProcesoDeCaza(baseProfugo);
         assertTrue(baseProfugo.noHayProfugos());
+        elCazador.getProfugosCapturados();
+        assertEquals(elCazador.cantProfugosCapturados(), 3);
     }
 
     @Test
     void unCazadorUrbanoRealizaElProcesoDeCaptraEnUnaZonaCapturandoLosProfugosSinDejarNada(){
-        Cazador elCazador = new CazadorUrbano(50);
+        Cazador elCazador = new CazadorUrbano("nahuel", 50);
+        profugo1.volverseNervioso();
         grupo.add(profugo1);
         grupo.add(profugo2);
         grupo.add(profugo3);
         Zona baseProfugo = new Zona("base", grupo);
         elCazador.realizarProcesoDeCaza(baseProfugo);
+        assertTrue(!baseProfugo.noHayProfugos());
+        elCazador.realizarProcesoDeCaza(baseProfugo);
         assertTrue(baseProfugo.noHayProfugos());
+        elCazador.getProfugosCapturados();
+        assertEquals(elCazador.cantProfugosCapturados(), 3);
+    }
+
+    @Test
+    void alConsultarLosProfugosCapturadosElCazadorDevuelveUnaListaDeProfugosCapturados(){
+        Cazador elCazador = new CazadorSigiloso("matt", 50);
+        grupo.add(profugo1);
+        grupo.add(profugo2);
+        grupo.add(profugo3);
+        Zona baseProfugo = new Zona("base", grupo);
+        elCazador.realizarProcesoDeCaza(baseProfugo);
+        assertTrue(!baseProfugo.noHayProfugos());
+        elCazador.realizarProcesoDeCaza(baseProfugo);
+        assertEquals(elCazador.getProfugosCapturados().size(), 3);
     }
 }

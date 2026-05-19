@@ -30,8 +30,8 @@ public class Zona {
         return profugosEnLaZona.isEmpty();
     }
 
-    public void sacarProfugoSiPuede(Profugo unProfugo, Boolean condicion){
-        if(condicion) {
+    public void sacarProfugoSiPuede(Profugo unProfugo){
+        if(profugosEnLaZona.contains(unProfugo)) {
             profugosEnLaZona.remove(unProfugo);
         }
     }

@@ -30,7 +30,7 @@ public abstract class Cazador{
 
     public void realizarProcesoDeCaza(Zona unaZona) {
         unaZona.getProfugosEnLaZona().stream().forEach(p -> this.capturarProfugo(p));
-        profugosCapturados.forEach(p -> unaZona.sacarProfugoSiPuede(p, profugosCapturados.contains(p)));
+        profugosCapturados.forEach(p -> unaZona.sacarProfugoSiPuede(p));
         experiencia += unaZona.profugoConMenorHabilidad() + (2 * this.cantProfugosCapturados());
     }
 

@@ -65,7 +65,7 @@ public class AgenciaTest {
 
     @Test 
     void cuandoLePideQuitarUnMiembroPorCondicionEntoncesLoElimina(){
-        baseProfugo.sacarProfugoSiPuede(fernando, true);
+        baseProfugo.sacarProfugoSiPuede(fernando);
         assertTrue(!baseProfugo.getProfugosEnLaZona().contains(fernando));
     }
 

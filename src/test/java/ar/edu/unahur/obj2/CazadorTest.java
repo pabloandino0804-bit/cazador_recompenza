@@ -5,13 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import ar.edu.unahur.obj2.Cazadores.Cazador;
 import ar.edu.unahur.obj2.Cazadores.CazadorRural;
 import ar.edu.unahur.obj2.Cazadores.CazadorSigiloso;
 import ar.edu.unahur.obj2.Cazadores.CazadorUrbano;
+import ar.edu.unahur.obj2.Profugos.IProfugo;
 import ar.edu.unahur.obj2.Profugos.Profugo;
 import ar.edu.unahur.obj2.lugares.Zona;
 
@@ -19,7 +20,7 @@ public class CazadorTest {
     private Profugo profugo1;
     private Profugo profugo2;
     private Profugo profugo3;
-    private Set<Profugo> grupo;
+    private List<IProfugo> grupo;
 
     @BeforeEach
     void setup(){
@@ -27,7 +28,7 @@ public class CazadorTest {
         profugo2 = new Profugo("micaela", 30, 50, false);
         profugo3 = new Profugo("roxanna", 40, 51, false);
 
-        grupo = new HashSet<>();
+        grupo = new ArrayList<>();
     }
 
     //Tests parte 1

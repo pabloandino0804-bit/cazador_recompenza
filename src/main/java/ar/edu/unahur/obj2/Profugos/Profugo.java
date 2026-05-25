@@ -1,8 +1,5 @@
 package ar.edu.unahur.obj2.Profugos;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import ar.edu.unahur.obj2.NivInvalidoException;
 
 public class Profugo implements IProfugo{
@@ -10,7 +7,6 @@ public class Profugo implements IProfugo{
     private Integer nivelInocencia = 0;
     private Integer nivelHabilidad;
     private Boolean estaNervioso;
-    private Set<String> entrenamientos = new HashSet<>();
 
     public Profugo(String nombre, Integer nivelInocencia, Integer nivelHabilidad, Boolean estaNervioso) {
         this.nombre = nombre;
@@ -19,6 +15,7 @@ public class Profugo implements IProfugo{
         this.estaNervioso = estaNervioso;
     }
 
+    @Override
     public String getNombreProfugo(){
         return nombre;
     }
@@ -38,10 +35,6 @@ public class Profugo implements IProfugo{
         return estaNervioso;
     }
 
-    public Set<String> getEntrenamientos() {
-        return entrenamientos;
-    }
-
     @Override
     public void volverseNervioso() {
         this.estaNervioso = true;
@@ -59,12 +52,7 @@ public class Profugo implements IProfugo{
 
     @Override
     public void disminuirInocencia() {
-        if(entrenamientos.contains("proteccionLegal")){
-            this.setNivelDeInocencia(Math.max(this.nivelInocencia-2, 40));
-        }
-        else {
-            this.setNivelDeInocencia(this.nivelInocencia-2);
-        }
+        this.setNivelDeInocencia(this.nivelInocencia-2);
     }
 
     public void setNivelDeInocencia(Integer nivInocencia) {
@@ -78,17 +66,11 @@ public class Profugo implements IProfugo{
     }
 
     private Boolean validarInocencia(Integer nivInocencia) {
-        return (nivInocencia >= 0 && nivInocencia <= 100);
+        return nivInocencia >= 0 && nivInocencia <= 100;
     }
     
     private Boolean validarHabilidad(Integer nivHabilidad) {
         return nivHabilidad <= 100;
-    }
-
-    @Override
-    public void artesMarcialesAvanzadas() {
-        this.setNivelDeHabilidad(Math.min(this.nivelHabilidad*2,100));
-        entrenamientos.add("artesMarcialesAvanzadas");
     }
 
     public void setNivelDeHabilidad(Integer nivHabilidad) {
@@ -99,19 +81,5 @@ public class Profugo implements IProfugo{
             throw new NivInvalidoException("El nivel de habilidad debe ser mayor a 100.");
         }
         this.nivelHabilidad = Integer.max(nivHabilidad,0);
-    }
-
-    @Override
-    public void entrenamientoDeElite() {
-        this.dejarSerNervioso();
-        entrenamientos.add("entrenamientoDeElite");
-    }
-
-    @Override
-    public void proteccionLegal() {
-        if (nivelInocencia < 40){
-            setNivelDeInocencia(40);
-        }
-        entrenamientos.add("proteccionLegal");
     }
 }

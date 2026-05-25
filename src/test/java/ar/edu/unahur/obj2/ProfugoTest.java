@@ -3,10 +3,16 @@ package ar.edu.unahur.obj2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ar.edu.unahur.obj2.Profugos.ArtesMarcialesAvanzadas;
+import ar.edu.unahur.obj2.Profugos.EntrenamientoElite;
+import ar.edu.unahur.obj2.Profugos.IProfugo;
 import ar.edu.unahur.obj2.Profugos.Profugo;
+import ar.edu.unahur.obj2.Profugos.ProteccionLegal;
 
 public class ProfugoTest {
     private Profugo miProfugo;
@@ -14,6 +20,11 @@ public class ProfugoTest {
     @BeforeEach 
     void setup(){
         miProfugo = new Profugo("Juan", 35, 25, true);
+    }
+
+    @AfterEach
+    void tearDown(){
+        miProfugo = null;
     }
 
     @Test
@@ -27,6 +38,11 @@ public class ProfugoTest {
     }
 
     @Test
+    void dadoUnProfugo_cuandoSePreguntaSiEstaNerviosoLeDevuelveElBoolean(){
+        assertTrue(miProfugo.estaNervioso());
+    }
+
+    @Test
     void SiElNivInocenciaACambiarEsNuloOSobrepasaDel100LanzaraUnaException(){
         assertThrows(NullPointerException.class, () -> miProfugo.setNivelDeInocencia(null));
     }
@@ -34,6 +50,7 @@ public class ProfugoTest {
     @Test
     void SIElNivelDeInocenciaNoEsDeEntre0y100LanzaraUnaExcepcionDeNivelInvalido(){
         assertThrows(NivInvalidoException.class, () -> miProfugo.setNivelDeInocencia(-10));
+        assertThrows(NivInvalidoException.class, () -> miProfugo.setNivelDeInocencia(140));
     }
 
     @Test
@@ -47,24 +64,38 @@ public class ProfugoTest {
     }
 
     @Test
+    void siElProfugoDecoratorCreadoTieneUnProfugoNulo_LanzaraUnaExcepcionDeValorNulo(){
+        assertThrows(NullPointerException.class, () -> new ArtesMarcialesAvanzadas(null));
+    }
+
+    @Test
     void cuandoUnProfugoEntrenaArtesMarcialesAdvSuHabilidadSeDuplica(){
-        miProfugo.artesMarcialesAvanzadas();
-        assertEquals(miProfugo.getNivelDeHabilidad(), 50);
-        assertTrue(miProfugo.getEntrenamientos().contains("artesMarcialesAvanzadas"));
+
+        IProfugo profugoKarateca = new ArtesMarcialesAvanzadas(miProfugo); 
+        assertEquals(profugoKarateca.getNivelDeHabilidad(), 50);
     }
 
     @Test
     void cuandoUnProfugoEntrenaEntrenamientoEliteNuncaSeConsideraraNervioso(){
         assertTrue(miProfugo.estaNervioso());
-        miProfugo.entrenamientoDeElite();
-        assertTrue(!miProfugo.estaNervioso());
-        assertTrue(miProfugo.getEntrenamientos().contains("entrenamientoDeElite"));
+        IProfugo profugoElite = new EntrenamientoElite(miProfugo);
+        assertEquals(profugoElite.getNombreProfugo(), "Juan");
+        profugoElite.volverseNervioso();
+        assertTrue(!profugoElite.estaNervioso());
     }
 
     @Test
     void cuandoUnProfugoEntrenaProteccionLegalSuInocenciaNuncaEstaraDebajoDe40(){
-        miProfugo.proteccionLegal();
-        assertEquals(miProfugo.getNivelDeInocencia(),40);
-        assertTrue(miProfugo.getEntrenamientos().contains("proteccionLegal"));
+        IProfugo profugoProtegido = new ProteccionLegal(miProfugo);
+        assertEquals(profugoProtegido.getNivelDeInocencia(),40);
+    }
+
+    @Test
+    void unProfugo_PuedeAdquirirOtroEntrenamiento_SinPerderLosEntrenamientosPrevios(){
+        IProfugo profugoProtegido = new ProteccionLegal(miProfugo);
+        assertEquals(profugoProtegido.getNivelDeInocencia(),40);
+        IProfugo profugoElite = new EntrenamientoElite(profugoProtegido);
+        assertTrue(!profugoElite.estaNervioso());
+        assertEquals(profugoElite.getNivelDeInocencia(),40);
     }
 }

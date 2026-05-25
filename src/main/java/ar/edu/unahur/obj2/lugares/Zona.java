@@ -1,24 +1,24 @@
 package ar.edu.unahur.obj2.lugares;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import ar.edu.unahur.obj2.Profugos.Profugo;
+import ar.edu.unahur.obj2.Profugos.IProfugo;
 
 public class Zona {
     private String nombre; 
-    private Set<Profugo> profugosEnLaZona = new HashSet<>();
+    private List<IProfugo> profugosEnLaZona = new ArrayList<>();
 
-    public Zona(String nombre, Set<Profugo> conjProfugos){
+    public Zona(String nombre, List<IProfugo> grupo){
         this.nombre = nombre;
-        this.profugosEnLaZona = conjProfugos;
+        this.profugosEnLaZona = grupo;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public Set<Profugo> getProfugosEnLaZona() {
+    public List<IProfugo> getProfugosEnLaZona() {
         return profugosEnLaZona;
     }
 
@@ -30,9 +30,7 @@ public class Zona {
         return profugosEnLaZona.isEmpty();
     }
 
-    public void sacarProfugoSiPuede(Profugo unProfugo){
-        if(profugosEnLaZona.contains(unProfugo)) {
+    public void sacarProfugo(IProfugo unProfugo){
             profugosEnLaZona.remove(unProfugo);
-        }
     }
 }

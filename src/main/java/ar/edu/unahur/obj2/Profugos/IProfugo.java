@@ -15,9 +15,5 @@ public interface IProfugo {
 
     void disminuirInocencia();
 
-    void artesMarcialesAvanzadas();
-
-    void entrenamientoDeElite();
-
-    void proteccionLegal();
+    String getNombreProfugo();
 }

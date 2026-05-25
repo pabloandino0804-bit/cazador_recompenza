@@ -3,9 +3,10 @@ package ar.edu.unahur.obj2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,9 @@ import ar.edu.unahur.obj2.Cazadores.Cazador;
 import ar.edu.unahur.obj2.Cazadores.CazadorRural;
 import ar.edu.unahur.obj2.Cazadores.CazadorSigiloso;
 import ar.edu.unahur.obj2.Cazadores.CazadorUrbano;
+import ar.edu.unahur.obj2.Profugos.ArtesMarcialesAvanzadas;
+import ar.edu.unahur.obj2.Profugos.EntrenamientoElite;
+import ar.edu.unahur.obj2.Profugos.IProfugo;
 import ar.edu.unahur.obj2.Profugos.Profugo;
 import ar.edu.unahur.obj2.lugares.Agencia;
 import ar.edu.unahur.obj2.lugares.Zona;
@@ -20,8 +24,8 @@ import ar.edu.unahur.obj2.lugares.Zona;
 public class AgenciaTest {
     private Profugo romeo;
     private Profugo jeckyll;
-    private Profugo matias;
-    private Profugo pisso;
+    private IProfugo matias;
+    private IProfugo pisso;
     private Profugo fernando;
     private Profugo martin;
     private Cazador cazadorPro = new CazadorSigiloso("pistolero con sombrero",65);
@@ -29,19 +33,17 @@ public class AgenciaTest {
     private Cazador cazadorRural = new CazadorRural("gato con pistolas", 47);
     private Zona baseProfugo;
     private Agencia agencia;
-    private Set<Profugo> grupo;
+    private List<IProfugo> grupo;
 
     @BeforeEach
     void setUp() {
         romeo = new Profugo("romeo", 23, 57, false);
         jeckyll = new Profugo("jeckyll", 30, 40, true);
-        matias = new Profugo("matias", 41, 51, false);
-        matias.proteccionLegal();
-        pisso = new Profugo("pisso", 50, 25, true);
-        fernando = new Profugo("fernando", 60, 25, true);
-        martin = new Profugo("martin", 70, 60, true);
-        jeckyll.entrenamientoDeElite();
-        grupo = new HashSet<>();
+        matias = new EntrenamientoElite(new Profugo("matias", 41, 50, false));
+        pisso = new ArtesMarcialesAvanzadas(new Profugo("pisso", 25, 25, false));
+        fernando = new Profugo("fernando", 60, 50, true);
+        martin = new Profugo("martin", 70, 40, true);
+        grupo = new ArrayList<IProfugo>();
         grupo.add(romeo);
         grupo.add(jeckyll);
         grupo.add(pisso);
@@ -50,31 +52,33 @@ public class AgenciaTest {
         grupo.add(martin);
         baseProfugo = new Zona("base", grupo);
 
-        Set<Cazador> cazadores = new HashSet<>();
-        cazadores.add(cazadorPro);
-        cazadores.add(cazadorUrbano);
-        cazadores.add(cazadorRural);
-        agencia = new Agencia("comisaria", cazadores);
+        agencia = Agencia.getInstance();
+        Agencia.getInstance().registrarCazador(cazadorPro);
+        Agencia.getInstance().registrarCazador(cazadorUrbano);
+        Agencia.getInstance().registrarCazador(cazadorRural);
+        
+    }
+
+    @AfterEach
+    void tearDown(){
+        Agencia.getInstance().getCazadores().remove(cazadorPro);
+        Agencia.getInstance().getCazadores().remove(cazadorUrbano);
+        Agencia.getInstance().getCazadores().remove(cazadorRural);
     }
 
     //Tests de Zona
     @Test
-    void cuandoLePreguntaElNombreALaZonaLaMismaDevuelveSuNombre(){
+    void cuandoLePreguntaElNombreDeZonaDevuelveSuNombre(){
         assertEquals(baseProfugo.getNombre(), "base");
     }
 
     @Test 
     void cuandoLePideQuitarUnMiembroPorCondicionEntoncesLoElimina(){
-        baseProfugo.sacarProfugoSiPuede(fernando);
+        baseProfugo.sacarProfugo(fernando);
         assertTrue(!baseProfugo.getProfugosEnLaZona().contains(fernando));
     }
 
     //Tests de Agencia
-    @Test
-    void cuandoLePreguntaElNombreDeAgenciaDevuelveSuNombre(){
-        assertEquals(agencia.getNombre(), "comisaria");
-    }
-
     @Test
     void cuandoLePreguntaLosCazadoresDeAgenciaDevuelveUnConjuntoDeCazadores(){
         assertEquals(agencia.getCazadores().size(), 3);
@@ -82,29 +86,35 @@ public class AgenciaTest {
 
     @Test
     void laAgenciacontaraTodosLosLadronesCapturadosTotalEnCadaCazador() {
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
         agencia.enviarCazadorAZona(cazadorPro, baseProfugo);
         agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
         agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
+        
         assertEquals(agencia.getProfugosCapturados().size(), 6);
     }
 
     @Test
     void CuandoSePreguntaElProfugoMasHabilidosoDevuelveElUnicoHabilidoso() {
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
         agencia.enviarCazadorAZona(cazadorPro, baseProfugo);
         agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
         agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
+
         assertEquals(agencia.profugoMasHabilCapturado().getNombreProfugo(), "romeo");
     }
 
     @Test
     void cuandoLaAgenciaPreguntaAlCazadorConMasCapturasDevuelveElMismo() {
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
         agencia.enviarCazadorAZona(cazadorPro, baseProfugo);
         agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
         agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
-        assertEquals(agencia.cazadorConMasCapturas().getNombre(), "pistolero con sombrero");
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
+        
+        assertEquals(agencia.cazadorConMasCapturas().getNombre(), "gato con pistolas");
     }
 
 }

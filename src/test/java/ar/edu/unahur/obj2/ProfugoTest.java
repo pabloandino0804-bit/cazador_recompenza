@@ -75,6 +75,7 @@ public class ProfugoTest {
         assertEquals(profugoKarateca.getNivelDeHabilidad(), 50);
     }
 
+    //Tests parte 2
     @Test
     void cuandoUnProfugoEntrenaEntrenamientoEliteNuncaSeConsideraraNervioso(){
         assertTrue(miProfugo.estaNervioso());

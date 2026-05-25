@@ -56,16 +56,23 @@ public class AgenciaTest {
         Agencia.getInstance().registrarCazador(cazadorPro);
         Agencia.getInstance().registrarCazador(cazadorUrbano);
         Agencia.getInstance().registrarCazador(cazadorRural);
-        
+
+        agencia.enviarCazadorAZona(cazadorPro, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
+        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
     }
 
     @AfterEach
     void tearDown(){
-        Agencia.getInstance().getCazadores().remove(cazadorPro);
-        Agencia.getInstance().getCazadores().remove(cazadorUrbano);
-        Agencia.getInstance().getCazadores().remove(cazadorRural);
+        Agencia.getInstance().getCazadores().clear();
+        cazadorPro.getProfugosCapturados().clear();
+        cazadorUrbano.getProfugosCapturados().clear();
+        cazadorRural.getProfugosCapturados().clear();
     }
 
+    //Tests Parte 3
     //Tests de Zona
     @Test
     void cuandoLePreguntaElNombreDeZonaDevuelveSuNombre(){
@@ -86,35 +93,16 @@ public class AgenciaTest {
 
     @Test
     void laAgenciacontaraTodosLosLadronesCapturadosTotalEnCadaCazador() {
-        agencia.enviarCazadorAZona(cazadorPro, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
-        
         assertEquals(agencia.getProfugosCapturados().size(), 6);
     }
 
     @Test
     void CuandoSePreguntaElProfugoMasHabilidosoDevuelveElUnicoHabilidoso() {
-        agencia.enviarCazadorAZona(cazadorPro, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
-
         assertEquals(agencia.profugoMasHabilCapturado().getNombreProfugo(), "romeo");
     }
 
     @Test
     void cuandoLaAgenciaPreguntaAlCazadorConMasCapturasDevuelveElMismo() {
-        agencia.enviarCazadorAZona(cazadorPro, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorRural, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
-        agencia.enviarCazadorAZona(cazadorUrbano, baseProfugo);
-        
         assertEquals(agencia.cazadorConMasCapturas().getNombre(), "gato con pistolas");
     }
-
 }

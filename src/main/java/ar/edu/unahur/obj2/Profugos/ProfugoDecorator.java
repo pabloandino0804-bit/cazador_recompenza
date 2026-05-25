@@ -1,6 +1,6 @@
 package ar.edu.unahur.obj2.Profugos;
 
-public class ProfugoDecorator implements IProfugo{
+public abstract class ProfugoDecorator implements IProfugo{
     protected final IProfugo profugo;
 
     public ProfugoDecorator(IProfugo unProfugo) {

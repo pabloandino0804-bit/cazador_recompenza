@@ -3,7 +3,6 @@ package ar.edu.unahur.obj2.Cazadores;
 import java.util.ArrayList;
 import java.util.List;
 import ar.edu.unahur.obj2.Profugos.IProfugo;
-import ar.edu.unahur.obj2.Profugos.Profugo;
 import ar.edu.unahur.obj2.lugares.Zona;
 
 public abstract class Cazador{
